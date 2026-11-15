@@ -1,0 +1,223 @@
+
+      
+      
+      <div class="page-intro tool-intro">
+          <p class="eyebrow">MAKERWORLD 精選</p>
+          <h1>有蓋外箱模型</h1>
+          <p>選一款喜歡的外箱，前往 MakerWorld 查看完整零件、列印配置與下載方式。</p>
+        </div>
+      <article class="makerworld-catalog specialized-catalog" aria-label="MakerWorld 外箱模型">
+          @for (featured of [featuredCase()]; track featured.url) {
+            <section class="special-showcase case-showcase" aria-live="polite">
+              <div class="special-showcase-visual">
+                <img [src]="featured.image" [alt]="featured.title + ' 有蓋外箱預覽'">
+                <span class="special-showcase-mark" aria-hidden="true">GRIDFINITY CASE / {{ featured.meta.split('｜')[0] }}</span>
+                <div class="special-progress" aria-hidden="true"><span></span></div>
+              </div>
+              <div class="special-showcase-copy">
+                <div class="special-showcase-topline"><span class="catalog-badge">{{ featured.badge }}</span><span>{{ caseCatalogIndex() + 1 }} / {{ makerWorldCases.length }}</span></div>
+                <h2>{{ featured.title }}</h2>
+                <p class="special-showcase-meta">{{ featured.meta }}</p>
+                <p>{{ featured.description }}</p>
+                <div class="special-showcase-actions">
+                  <a [href]="featured.url" target="_blank" rel="noopener noreferrer">前往 MakerWorld <span aria-hidden="true">↗</span></a>
+                  <div class="special-showcase-controls" aria-label="切換外箱模型">
+                    <button type="button" aria-label="上一個外箱" (click)="stepCaseCatalog(-1)">←</button>
+                    <button type="button" aria-label="下一個外箱" (click)="stepCaseCatalog(1)">→</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          }
+          <div class="special-toolbar case-catalog-toolbar">
+            <p class="special-count">選擇卡片預覽外箱細節</p>
+            <p class="special-count">{{ makerWorldCases.length }} 個精選模型</p>
+          </div>
+          <div class="makerworld-grid specialized-grid">
+            @for (item of makerWorldCases; track item.url; let i = $index) {
+              <article class="makerworld-card special-card" [class.special-active]="caseCatalogIndex() === i">
+                <button class="makerworld-card-visual special-card-select" type="button" (click)="showCaseCatalog(i)" [attr.aria-label]="'預覽 ' + item.title">
+                  <img [src]="item.image" [alt]="item.title + ' MakerWorld 模型封面'" loading="lazy">
+                  <span class="makerworld-mark" aria-hidden="true">MW</span>
+                </button>
+                <div class="makerworld-card-copy">
+                  <span class="catalog-badge">{{ item.badge }}</span>
+                  <h2>{{ item.title }}</h2>
+                  <p class="catalog-meta">{{ item.meta }}</p>
+                  <p>{{ item.description }}</p>
+                  <a class="special-card-link" [href]="item.url" target="_blank" rel="noopener noreferrer">查看模型 <span aria-hidden="true">↗</span></a>
+                </div>
+              </article>
+            }
+          </div>
+          <p class="catalog-note">模型檔案、版本與授權均以 MakerWorld 官方頁面為準；本站不重新託管 STL。</p>
+        </article>
+      
+      
+      <div class="layout" [class.baseplate-layout]="mode() === 'baseplate' || mode() === 'design' || mode() === 'quote'" [class.quote-layout]="mode() === 'quote'" [hidden]="mode() !== 'baseplate' && mode() !== 'design' && mode() !== 'quote'">
+        <form class="case-options" (submit)="submitCaseInquiry($event, caseForm)" #caseForm>
+            <fieldset [disabled]="busy()">
+              <legend>1　選擇外箱系列</legend>
+              <div class="case-family-grid">
+                <label class="case-family-card" [class.selected]="caseFamily() === 'rugged'">
+                  <input name="family" type="radio" value="rugged" [checked]="caseFamily() === 'rugged'" (change)="setCaseFamily('rugged')">
+                  <span class="case-card-icon rugged-icon" aria-hidden="true"><i></i><b></b></span>
+                  <strong>堅固攜帶箱</strong>
+                  <small>雙鎖扣、加固鉸鏈、密封與堆疊。</small>
+                </label>
+                <label class="case-family-card" [class.selected]="caseFamily() === 'modular'">
+                  <input name="family" type="radio" value="modular" [checked]="caseFamily() === 'modular'" (change)="setCaseFamily('modular')">
+                  <span class="case-card-icon modular-icon" aria-hidden="true"><i></i><b></b></span>
+                  <strong>模組擴充箱</strong>
+                  <small>滑軌、壁掛、堆疊鎖定與雙向提把。</small>
+                </label>
+              </div>
+
+              <div class="case-option-section">
+                <strong>2　尺寸與攜帶方式</strong>
+                <label>箱體高度
+                  <select name="height" [value]="caseHeight()" (change)="setCaseHeight($event)">
+                    @if (caseFamily() === 'modular') { <option value="4">Compact 4U｜薄型工具</option> }
+                    <option value="6">Standard 6U｜一般零件</option>
+                    @if (caseFamily() === 'modular') {
+                      <option value="9">Deep 9U｜較高物品</option>
+                      <option value="12">XL 12U｜大型設備</option>
+                      <option value="15">XXL 15U｜多層配置</option>
+                    } @else {
+                      <option value="12">Fat Boy 12U｜大型設備</option>
+                    }
+                  </select>
+                </label>
+                <label>提把配置
+                  <select name="handle" [value]="caseHandle()" (change)="setCaseHandle($event)">
+                    <option value="front">前方旋轉提把</option>
+                    <option value="top">上方提把</option>
+                    <option value="both">前方＋上方</option>
+                    <option value="none">不需要提把</option>
+                  </select>
+                </label>
+                <label>內部配置
+                  <select name="interior" [value]="caseInterior()" (change)="setCaseInterior($event)">
+                    <option value="starter">基本收納盒套組</option>
+                    <option value="custom">客製 Gridfinity 配置</option>
+                    <option value="owned">已有收納盒</option>
+                    <option value="case">僅外箱</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="case-option-section">
+                <strong>3　功能選配</strong>
+                <div class="case-check-grid">
+                  <label class="check"><input name="stacking" type="checkbox" [checked]="caseStacking()" (change)="toggleCaseOption('stacking', $event)">箱體堆疊鎖定</label>
+                  <label class="check"><input name="labels" type="checkbox" [checked]="caseLabels()" (change)="toggleCaseOption('labels', $event)">標籤區</label>
+                  <label class="check"><input name="magnets" type="checkbox" [checked]="caseMagnets()" (change)="toggleCaseOption('magnets', $event)">內部磁鐵孔</label>
+                  @if (caseFamily() === 'rugged') {
+                    <label class="check"><input name="seal" type="checkbox" [checked]="caseSeal()" (change)="toggleCaseOption('seal', $event)">密封圈</label>
+                  } @else {
+                    <label class="check"><input name="drawer" type="checkbox" [checked]="caseDrawer()" (change)="toggleCaseOption('drawer', $event)">抽屜滑軌</label>
+                    <label class="check"><input name="wallMount" type="checkbox" [checked]="caseWallMount()" (change)="toggleCaseOption('wallMount', $event)">壁掛／固定板</label>
+                  }
+                </div>
+              </div>
+
+              <div class="case-option-section case-order-fields">
+                <strong>4　製作需求</strong>
+                <label>材料
+                  <select name="material" [value]="caseMaterial()" (change)="setCaseMaterial($event)">
+                    <option value="PETG HF">PETG HF｜建議</option>
+                    <option value="PETG">PETG｜需確認橋接</option>
+                  </select>
+                </label>
+                <label>主色
+                  <select name="color" [value]="caseColor()" (change)="setCaseColor($event)">
+                    <option value="graphite">石墨黑</option>
+                    <option value="navy">深海藍</option>
+                    <option value="orange">工業橘</option>
+                    <option value="sand">沙岩灰</option>
+                  </select>
+                </label>
+                <label>數量<input name="quantity" type="number" min="1" max="100" value="1" required></label>
+                <label>聯絡信箱<input name="email" type="email" maxlength="254" required></label>
+              </div>
+              <button type="submit">送出此配置詢價</button>
+            </fieldset>
+            <p class="case-note">固定 5 × 4 Gridfinity 格位。正式結構、五金與價格會在人工審核後確認。</p>
+            <p role="status">{{ status() }}</p>
+          </form>
+        <section class="preview-panel" aria-label="3D 模型預覽">
+          <h2>3D 預覽</h2>
+          <div class="case-preview-tabs" aria-label="預覽狀態">
+              <button type="button" [class.active]="casePreviewState() === 'closed'" (click)="casePreviewState.set('closed')">收合</button>
+              <button type="button" [class.active]="casePreviewState() === 'open'" (click)="casePreviewState.set('open')">開箱</button>
+              <button type="button" [class.active]="casePreviewState() === 'stacked'" (click)="casePreviewState.set('stacked')">堆疊</button>
+              <button type="button" [class.active]="casePreviewState() === 'mounted'" (click)="casePreviewState.set('mounted')">擴充</button>
+            </div>
+          <div class="viewport" #viewport [class.case-product-stage]="mode() === 'case'" [class.rugged]="caseFamily() === 'rugged'" [class.modular]="caseFamily() === 'modular'" [class.open]="casePreviewState() === 'open'" [class.stacked]="casePreviewState() === 'stacked'" [class.mounted]="casePreviewState() === 'mounted'" [class.with-top-handle]="caseHandle() === 'top' || caseHandle() === 'both'" [class.with-front-handle]="caseHandle() === 'front' || caseHandle() === 'both'" [class.with-drawer]="caseDrawer()" [style.--case-color]="caseColorValue()">
+            @if (mode() === 'case') {
+              <div class="case-mount-board" aria-hidden="true"></div>
+              <div class="case-product" role="img" [attr.aria-label]="casePreviewLabel()">
+                <div class="case-product-lid">
+                  <div class="case-lid-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                  <span class="case-top-handle" aria-hidden="true"></span>
+                  <span class="case-hinge hinge-a" aria-hidden="true"></span><span class="case-hinge hinge-b" aria-hidden="true"></span>
+                </div>
+                <div class="case-product-body">
+                  <span class="case-rib rib-a"></span><span class="case-rib rib-b"></span><span class="case-rib rib-c"></span>
+                  <span class="case-lock lock-a"></span><span class="case-lock lock-b"></span>
+                  <span class="case-front-handle"></span>
+                  <span class="case-side-rail rail-a"></span><span class="case-side-rail rail-b"></span>
+                  <span class="case-label-zone">{{ caseFamily() === 'rugged' ? 'RUGGED' : caseHeight() + 'U' }}</span>
+                  <div class="case-inner-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                </div>
+              </div>
+            } @else if (!hasPreview()) {
+              <p>{{ busy() ? '處理中…' : dimensions() ? '無法顯示 3D 預覽' : '產生或上傳 STL 後即可預覽' }}</p>
+            }
+          </div>
+          <div class="case-summary">
+              <div><span>系列</span><strong>{{ caseFamilyLabel() }}</strong></div>
+              <div><span>格位／高度</span><strong>5 × 4 · {{ caseHeight() }}U</strong></div>
+              <div><span>內部</span><strong>{{ caseInteriorLabel() }}</strong></div>
+              <div><span>五金</span><strong>{{ caseHardwareLabel() }}</strong></div>
+              <div class="case-summary-wide"><span>選配</span><strong>{{ caseFeatureSummary() }}</strong></div>
+              <p>{{ caseCompatibilityNote() }}</p>
+            </div>
+            <div class="case-source-panel">
+              <div>
+                <span>授權模型來源</span>
+                <strong>{{ caseFamily() === 'rugged' ? 'Gridfinity Case System' : 'Schubox V2 5×4' }}</strong>
+              </div>
+              <a class="source-action" [href]="caseSourceUrl()" target="_blank" rel="noopener noreferrer">在 MakerWorld 開啟 ↗</a>
+            </div>
+          @if (dimensions()) {
+            <p>模型外尺寸 {{ dimensions() }} mm</p>
+          }
+        </section>
+      </div>
+      
+    
+    @if (renderMessage()) {
+      <div class="render-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="render-dialog">
+          @switch (renderKind()) {
+            @case ('baseplate') {
+              <div class="render-grid" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            }
+            @case ('bin') {
+              <div class="render-bin-model" aria-hidden="true">
+                <span class="render-bin-shell"></span>
+                <span class="render-bin-layers"></span>
+                <i class="render-nozzle"></i>
+              </div>
+            }
+          }
+          <strong>{{ renderMessage() }}</strong>
+          <p>大型模型可能需要 1–3 分鐘，請保持頁面開啟。</p>
+        </div>
+      </div>
+    }

@@ -1,0 +1,112 @@
+
+      
+      
+      <div class="page-intro tool-intro">
+          <p class="eyebrow">客製化詢價</p>
+          <h1>從需求到成品</h1>
+          <p>已有 STL 可上傳取得列印初估；需要客製設計，可直接填寫用途、尺寸與需求，由工作室確認正式報價。</p>
+        </div>
+      
+      
+      
+      <div class="layout" [class.baseplate-layout]="mode() === 'baseplate' || mode() === 'design' || mode() === 'quote'" [class.quote-layout]="mode() === 'quote'" [hidden]="mode() !== 'baseplate' && mode() !== 'design' && mode() !== 'quote'">
+        <div class="stack quote-stack">
+            <form (submit)="submitCustomInquiry($event, customForm)" #customForm>
+              <fieldset [disabled]="busy()">
+                <legend>客製設計需求（無需 STL）</legend>
+                <label>聯絡信箱<input name="email" type="email" maxlength="254" required></label>
+                <label>數量<input name="quantity" type="number" min="1" max="100" value="1" required></label>
+                <label>客製需求<textarea name="note" rows="5" maxlength="1000" required placeholder="請描述用途、收納物品、空間尺寸（mm）、顏色及希望交期；尺寸不確定也可先說明想法。"></textarea></label>
+                <button type="submit">送出客製需求</button>
+              </fieldset>
+            </form>
+            <form class="quote-upload" (submit)="estimateFile($event, quoteForm)" #quoteForm>
+              <fieldset [disabled]="busy()" (input)="resetQuote()">
+                <legend>上傳模型</legend>
+                <label>STL 檔案（上限 10 MB）<input name="file" type="file" accept=".stl" required></label>
+                <label>數量<input name="quantity" type="number" min="1" max="100" value="1" required></label>
+                <p class="quote-profile-note">固定使用 PLA、0.4 mm 噴嘴、0.20 mm 層高與 15% 填充進行切片初估。</p>
+                <button type="submit">取得初估</button>
+              </fieldset>
+            </form>
+            @if (estimate(); as result) {
+              <form (submit)="submitInquiry($event, inquiryForm)" #inquiryForm>
+                <fieldset [disabled]="busy() || !!inquiryId()" aria-label="詢價資料">
+                  <label class="estimate-amount" for="estimate-amount">
+                    {{ result.amount === null ? '估價狀態' : '耗材成本' }}
+                    <output id="estimate-amount">{{ result.amount === null ? '待人工審核' : 'NT$ ' + result.amount.toFixed(2) }}</output>
+                  </label>
+                  @if (result.reviewReason) { <p>{{ result.reviewReason }}</p> }
+                  @if (result.filamentGrams !== null && result.filamentGrams !== undefined) {
+                    <div class="estimate-metrics" aria-label="切片估算結果">
+                      <label for="unit-filament">單件耗材<output id="unit-filament">{{ formatGrams(result.filamentGrams) }}</output></label>
+                      <label for="total-filament">總耗材<output id="total-filament">{{ formatGrams(result.filamentGrams * result.quantity) }}</output></label>
+                      <label for="unit-print-time">單件時間<output id="unit-print-time">{{ formatPrintTime(result.printTimeSeconds) }}</output></label>
+                    </div>
+                    <p class="estimate-profile">{{ result.slicerProfile }}</p>
+                  }
+                  <label>聯絡信箱<input name="email" type="email" maxlength="254" required></label>
+                  <label>備註（選填）<textarea name="note" rows="4" maxlength="1000" placeholder="例如：希望的顏色、用途或交期需求"></textarea></label>
+                  <button type="submit">送出詢價</button>
+                </fieldset>
+              </form>
+            }
+            <p role="status">{{ status() }}</p>
+          </div>
+        <section class="preview-panel" aria-label="3D 模型預覽">
+          <h2>3D 預覽</h2>
+          
+          <div class="viewport" #viewport [class.case-product-stage]="mode() === 'case'" [class.rugged]="caseFamily() === 'rugged'" [class.modular]="caseFamily() === 'modular'" [class.open]="casePreviewState() === 'open'" [class.stacked]="casePreviewState() === 'stacked'" [class.mounted]="casePreviewState() === 'mounted'" [class.with-top-handle]="caseHandle() === 'top' || caseHandle() === 'both'" [class.with-front-handle]="caseHandle() === 'front' || caseHandle() === 'both'" [class.with-drawer]="caseDrawer()" [style.--case-color]="caseColorValue()">
+            @if (mode() === 'case') {
+              <div class="case-mount-board" aria-hidden="true"></div>
+              <div class="case-product" role="img" [attr.aria-label]="casePreviewLabel()">
+                <div class="case-product-lid">
+                  <div class="case-lid-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                  <span class="case-top-handle" aria-hidden="true"></span>
+                  <span class="case-hinge hinge-a" aria-hidden="true"></span><span class="case-hinge hinge-b" aria-hidden="true"></span>
+                </div>
+                <div class="case-product-body">
+                  <span class="case-rib rib-a"></span><span class="case-rib rib-b"></span><span class="case-rib rib-c"></span>
+                  <span class="case-lock lock-a"></span><span class="case-lock lock-b"></span>
+                  <span class="case-front-handle"></span>
+                  <span class="case-side-rail rail-a"></span><span class="case-side-rail rail-b"></span>
+                  <span class="case-label-zone">{{ caseFamily() === 'rugged' ? 'RUGGED' : caseHeight() + 'U' }}</span>
+                  <div class="case-inner-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                </div>
+              </div>
+            } @else if (!hasPreview()) {
+              <p>{{ busy() ? '處理中…' : dimensions() ? '無法顯示 3D 預覽' : '產生或上傳 STL 後即可預覽' }}</p>
+            }
+          </div>
+          
+          @if (dimensions()) {
+            <p>模型外尺寸 {{ dimensions() }} mm</p>
+          }
+        </section>
+      </div>
+      
+    
+    @if (renderMessage()) {
+      <div class="render-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="render-dialog">
+          @switch (renderKind()) {
+            @case ('baseplate') {
+              <div class="render-grid" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            }
+            @case ('bin') {
+              <div class="render-bin-model" aria-hidden="true">
+                <span class="render-bin-shell"></span>
+                <span class="render-bin-layers"></span>
+                <i class="render-nozzle"></i>
+              </div>
+            }
+          }
+          <strong>{{ renderMessage() }}</strong>
+          <p>大型模型可能需要 1–3 分鐘，請保持頁面開啟。</p>
+        </div>
+      </div>
+    }

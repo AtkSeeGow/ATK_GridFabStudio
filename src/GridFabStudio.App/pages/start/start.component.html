@@ -1,0 +1,90 @@
+
+      
+      <article class="planning-start">
+          <div class="page-intro">
+            <p class="eyebrow">收納規劃</p>
+            <h1>先決定從哪裡開始。</h1>
+            <p>還沒有底板，先從抽屜尺寸與格數開始；已經有底板，就直接設計合用的收納盒。</p>
+          </div>
+          <div class="planning-options">
+            <section class="planning-card" aria-labelledby="baseplate-choice-title">
+              <div class="plan-visual plan-baseplate" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <p class="eyebrow">從空間開始</p>
+              <h2 id="baseplate-choice-title">底板與抽屜規劃</h2>
+              <p>適合還沒有 Gridfinity 底板，或需要先確認抽屜能放幾格的人。</p>
+              <button type="button" (click)="select('baseplate')">先規劃底板</button>
+            </section>
+            <section class="planning-card" aria-labelledby="bin-choice-title">
+              <div class="plan-visual plan-bin" aria-hidden="true"><span></span></div>
+              <p class="eyebrow">從物品開始</p>
+              <h2 id="bin-choice-title">收納盒設計</h2>
+              <p>適合已有底板或已經知道格數，想直接設定盒子尺寸與高度的人。</p>
+              <button type="button" (click)="select('design')">直接設計盒子</button>
+            </section>
+          </div>
+        </article>
+      
+      
+      
+      
+      <div class="layout" [class.baseplate-layout]="mode() === 'baseplate' || mode() === 'design' || mode() === 'quote'" [class.quote-layout]="mode() === 'quote'" [hidden]="mode() !== 'baseplate' && mode() !== 'design' && mode() !== 'quote'">
+        
+        <section class="preview-panel" aria-label="3D 模型預覽">
+          <h2>3D 預覽</h2>
+          
+          <div class="viewport" #viewport [class.case-product-stage]="mode() === 'case'" [class.rugged]="caseFamily() === 'rugged'" [class.modular]="caseFamily() === 'modular'" [class.open]="casePreviewState() === 'open'" [class.stacked]="casePreviewState() === 'stacked'" [class.mounted]="casePreviewState() === 'mounted'" [class.with-top-handle]="caseHandle() === 'top' || caseHandle() === 'both'" [class.with-front-handle]="caseHandle() === 'front' || caseHandle() === 'both'" [class.with-drawer]="caseDrawer()" [style.--case-color]="caseColorValue()">
+            @if (mode() === 'case') {
+              <div class="case-mount-board" aria-hidden="true"></div>
+              <div class="case-product" role="img" [attr.aria-label]="casePreviewLabel()">
+                <div class="case-product-lid">
+                  <div class="case-lid-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                  <span class="case-top-handle" aria-hidden="true"></span>
+                  <span class="case-hinge hinge-a" aria-hidden="true"></span><span class="case-hinge hinge-b" aria-hidden="true"></span>
+                </div>
+                <div class="case-product-body">
+                  <span class="case-rib rib-a"></span><span class="case-rib rib-b"></span><span class="case-rib rib-c"></span>
+                  <span class="case-lock lock-a"></span><span class="case-lock lock-b"></span>
+                  <span class="case-front-handle"></span>
+                  <span class="case-side-rail rail-a"></span><span class="case-side-rail rail-b"></span>
+                  <span class="case-label-zone">{{ caseFamily() === 'rugged' ? 'RUGGED' : caseHeight() + 'U' }}</span>
+                  <div class="case-inner-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                </div>
+              </div>
+            } @else if (!hasPreview()) {
+              <p>{{ busy() ? '處理中…' : dimensions() ? '無法顯示 3D 預覽' : '產生或上傳 STL 後即可預覽' }}</p>
+            }
+          </div>
+          
+          @if (dimensions()) {
+            <p>模型外尺寸 {{ dimensions() }} mm</p>
+          }
+        </section>
+      </div>
+      
+    
+    @if (renderMessage()) {
+      <div class="render-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="render-dialog">
+          @switch (renderKind()) {
+            @case ('baseplate') {
+              <div class="render-grid" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            }
+            @case ('bin') {
+              <div class="render-bin-model" aria-hidden="true">
+                <span class="render-bin-shell"></span>
+                <span class="render-bin-layers"></span>
+                <i class="render-nozzle"></i>
+              </div>
+            }
+          }
+          <strong>{{ renderMessage() }}</strong>
+          <p>大型模型可能需要 1–3 分鐘，請保持頁面開啟。</p>
+        </div>
+      </div>
+    }

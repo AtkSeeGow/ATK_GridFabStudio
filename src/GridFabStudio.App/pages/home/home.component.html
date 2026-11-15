@@ -1,0 +1,167 @@
+
+      <article class="studio-home">
+          <section class="home-hero" aria-labelledby="home-title">
+            <div class="hero-animation" aria-hidden="true">
+              <div class="hero-glow"></div>
+              <div class="hero-grid"></div>
+              <div class="hero-bin hero-bin-a"><span></span><span></span></div>
+              <div class="hero-bin hero-bin-b"><span></span></div>
+              <div class="hero-bin hero-bin-c"><span></span><span></span><span></span></div>
+              <div class="hero-scan"></div>
+              <div class="hero-orbit hero-orbit-a"></div>
+              <div class="hero-orbit hero-orbit-b"></div>
+            </div>
+            <div class="hero-content">
+              <p class="eyebrow">客製化 3D 列印收納方案</p>
+              <h1 id="home-title"><span>把凌亂的空間，</span><span>變成剛剛好的秩序。</span></h1>
+              <p class="hero-summary">我協助你把抽屜、工具與工作流程，轉化為真正合用的 Gridfinity 收納。從尺寸規劃、3D 模型到列印成品，一次完成。</p>
+              <p class="hero-service-area">服務地區｜目前僅接受基隆地區委託。</p>
+              <div class="home-actions">
+                <button type="button" (click)="select('start')">開始規劃收納</button>
+                <button class="secondary" type="button" (click)="select('quote')">已有 STL，取得報價</button>
+              </div>
+              <ul class="hero-services" aria-label="服務項目">
+                <li><span>01</span> 尺寸規劃</li>
+                <li><span>02</span> 客製建模</li>
+                <li><span>03</span> 3D 列印</li>
+              </ul>
+            </div>
+            <div class="hero-scroll" aria-hidden="true"><span></span>往下了解流程</div>
+          </section>
+
+          <section class="home-process" aria-labelledby="process-title" #motionSection>
+            <div class="section-heading">
+              <div><p class="eyebrow">製作流程</p><h2 id="process-title">從尺寸到成品。</h2></div>
+            </div>
+              <div class="motion-grid process-grid" [class.motion-active]="motionVisible()">
+                <figure>
+                  <div class="motion-stage" aria-hidden="true">
+                    <div class="process-sizing"><div class="process-outline"></div><div class="process-ruler"></div></div>
+                  </div>
+                  <figcaption><strong>01　依空間設計</strong><span>依抽屜尺寸與物品大小，選擇格數、高度和壁厚。</span></figcaption>
+                </figure>
+                <figure>
+                  <div class="motion-stage" aria-hidden="true">
+                    <div class="process-turntable"><div class="process-model"></div></div>
+                  </div>
+                  <figcaption><strong>02　預覽與確認</strong><span>旋轉 3D 模型、核對外尺寸，產出 STL。已有檔案也可直接上傳初估。</span></figcaption>
+                </figure>
+                <figure>
+                  <div class="motion-stage" aria-hidden="true">
+                    <div class="process-print"><div class="process-layers"></div><div class="process-nozzle"></div></div>
+                  </div>
+                  <figcaption><strong>03　報價與製作</strong><span>確認可列印性、材料、數量與正式價格，再安排生產與交付。</span></figcaption>
+                </figure>
+              </div>
+          </section>
+
+          <section class="home-work" aria-labelledby="work-title">
+            <div class="work-heading">
+              <div>
+                <p class="eyebrow">成品案例</p>
+                <h2 id="work-title">收納，不只剛好放得下。</h2>
+              </div>
+              <p>從物件尺寸、取用順序到外箱結構，讓每個格位都真正服務使用情境。</p>
+            </div>
+            <div class="work-grid">
+              <figure class="work-feature">
+                <div class="work-media work-video">
+                  <video [autoplay]="!reducedMotion" [muted]="true" loop playsinline preload="metadata" (canplay)="playShowcase($event)" poster="media/portfolio-case-poster.jpg" aria-label="模組盒配置、外箱收合與堆疊展示影片">
+                    <source src="media/portfolio-case-demo.mp4" type="video/mp4">
+                  </video>
+                  <span class="work-badge">16 秒實作展示</span>
+                </div>
+                <figcaption><strong>模組化五金外箱</strong><span>同一套格位可依零件尺寸重新配置，收合後直接堆疊攜帶。</span></figcaption>
+              </figure>
+              <figure>
+                <img src="media/portfolio-electronics.jpg" loading="lazy" alt="黑色外箱內為電子設備量身配置的灰色收納內襯">
+                <figcaption><strong>電子設備專用外箱</strong><span>依設備輪廓安排定位槽，減少移動並保留快速取用空間。</span></figcaption>
+              </figure>
+              <figure>
+                <img src="media/portfolio-hardware.jpg" loading="lazy" alt="灰色外箱內以黃白紅色模組盒分類收納不同尺寸螺絲">
+                <figcaption><strong>五金零件分格配置</strong><span>以不同格數與顏色區分規格，補料、盤點與攜帶都更直覺。</span></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="home-equipment" aria-labelledby="equipment-title">
+            <p class="eyebrow">工作室設備</p>
+            <h2 id="equipment-title">讓每個設計，穩定成形。</h2>
+            <ul class="equipment-list">
+              <li>
+                <div class="equipment-image equipment-x2d" role="img" aria-label="Bambu Lab X2D 封閉式列印機"></div>
+                <a href="https://blog.bambulab.com/xcellence-made-simple-bambu-lab-presents-the-x2d/" target="_blank" rel="noopener noreferrer">Bambu Lab X2D</a>
+              </li>
+              <li>
+                <div class="equipment-image equipment-a1" role="img" aria-label="Bambu Lab A1 mini 列印機與 AMS 供料架"></div>
+                <a href="https://bambulab-us.myshopify.com/products/a1-mini" target="_blank" rel="noopener noreferrer">Bambu Lab A1 mini + AMS</a>
+              </li>
+            </ul>
+            <p class="equipment-credit">設備圖片來源：Bambu Lab 官方產品頁</p>
+          </section>
+
+        </article>
+      
+      
+      
+      
+      
+      <div class="layout" [class.baseplate-layout]="mode() === 'baseplate' || mode() === 'design' || mode() === 'quote'" [class.quote-layout]="mode() === 'quote'" [hidden]="mode() !== 'baseplate' && mode() !== 'design' && mode() !== 'quote'">
+        
+        <section class="preview-panel" aria-label="3D 模型預覽">
+          <h2>3D 預覽</h2>
+          
+          <div class="viewport" #viewport [class.case-product-stage]="mode() === 'case'" [class.rugged]="caseFamily() === 'rugged'" [class.modular]="caseFamily() === 'modular'" [class.open]="casePreviewState() === 'open'" [class.stacked]="casePreviewState() === 'stacked'" [class.mounted]="casePreviewState() === 'mounted'" [class.with-top-handle]="caseHandle() === 'top' || caseHandle() === 'both'" [class.with-front-handle]="caseHandle() === 'front' || caseHandle() === 'both'" [class.with-drawer]="caseDrawer()" [style.--case-color]="caseColorValue()">
+            @if (mode() === 'case') {
+              <div class="case-mount-board" aria-hidden="true"></div>
+              <div class="case-product" role="img" [attr.aria-label]="casePreviewLabel()">
+                <div class="case-product-lid">
+                  <div class="case-lid-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                  <span class="case-top-handle" aria-hidden="true"></span>
+                  <span class="case-hinge hinge-a" aria-hidden="true"></span><span class="case-hinge hinge-b" aria-hidden="true"></span>
+                </div>
+                <div class="case-product-body">
+                  <span class="case-rib rib-a"></span><span class="case-rib rib-b"></span><span class="case-rib rib-c"></span>
+                  <span class="case-lock lock-a"></span><span class="case-lock lock-b"></span>
+                  <span class="case-front-handle"></span>
+                  <span class="case-side-rail rail-a"></span><span class="case-side-rail rail-b"></span>
+                  <span class="case-label-zone">{{ caseFamily() === 'rugged' ? 'RUGGED' : caseHeight() + 'U' }}</span>
+                  <div class="case-inner-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                </div>
+              </div>
+            } @else if (!hasPreview()) {
+              <p>{{ busy() ? '處理中…' : dimensions() ? '無法顯示 3D 預覽' : '產生或上傳 STL 後即可預覽' }}</p>
+            }
+          </div>
+          
+          @if (dimensions()) {
+            <p>模型外尺寸 {{ dimensions() }} mm</p>
+          }
+        </section>
+      </div>
+      
+    
+    @if (renderMessage()) {
+      <div class="render-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="render-dialog">
+          @switch (renderKind()) {
+            @case ('baseplate') {
+              <div class="render-grid" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            }
+            @case ('bin') {
+              <div class="render-bin-model" aria-hidden="true">
+                <span class="render-bin-shell"></span>
+                <span class="render-bin-layers"></span>
+                <i class="render-nozzle"></i>
+              </div>
+            }
+          }
+          <strong>{{ renderMessage() }}</strong>
+          <p>大型模型可能需要 1–3 分鐘，請保持頁面開啟。</p>
+        </div>
+      </div>
+    }

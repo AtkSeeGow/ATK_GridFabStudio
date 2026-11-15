@@ -1,0 +1,31 @@
+
+    <header class="site-header">
+      <div class="site-bar">
+        <button class="brand" type="button" [disabled]="busy()" (click)="select('home')">
+          <span class="brand-mark" aria-hidden="true"></span>GridFabStudio
+        </button>
+      <nav aria-label="工作區">
+        <button type="button" [attr.aria-pressed]="mode() === 'home'" [disabled]="busy()" (click)="select('home')">首頁</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'baseplate'" [disabled]="busy()" (click)="select('baseplate')">底板設計</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'design'" [disabled]="busy()" (click)="select('design')">收納盒設計</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'specialized'" [disabled]="busy()" (click)="select('specialized')">專用儲存格</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'case'" [disabled]="busy()" (click)="select('case')">外箱設計</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'gridfinity'" [disabled]="busy()" (click)="select('gridfinity')">認識 Gridfinity</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'quote'" [disabled]="busy()" (click)="select('quote')">客製化詢價</button>
+        <button type="button" [attr.aria-pressed]="mode() === 'admin'" [disabled]="busy()" (click)="select('admin')">詢價後台</button>
+      </nav>
+      </div>
+    </header>
+    <main>
+@switch (mode()) {
+  @case ('home') { <gridfab-home-page (navigate)="select($event)" /> }
+  @case ('start') { <gridfab-start-page (navigate)="select($event)" /> }
+  @case ('baseplate') { <gridfab-baseplate-page (navigate)="select($event)" /> }
+  @case ('design') { <gridfab-design-page (navigate)="select($event)" /> }
+  @case ('specialized') { <gridfab-specialized-page (navigate)="select($event)" /> }
+  @case ('case') { <gridfab-case-page (navigate)="select($event)" /> }
+  @case ('gridfinity') { <gridfab-gridfinity-page (navigate)="select($event)" /> }
+  @case ('quote') { <gridfab-quote-page (navigate)="select($event)" /> }
+  @case ('admin') { <gridfab-admin-page (navigate)="select($event)" /> }
+}
+</main>

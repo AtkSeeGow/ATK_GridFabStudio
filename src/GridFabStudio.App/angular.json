@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "projects": {
+    "gridfabstudio": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": ".",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "main.ts",
+            "index": "index.html",
+            "tsConfig": "tsconfig.json",
+            "styles": ["styles.css"],
+            "assets": [
+              { "glob": "**/*", "input": "assets/media", "output": "media/" }
+            ]
+          }
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": { "buildTarget": "gridfabstudio:build" }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

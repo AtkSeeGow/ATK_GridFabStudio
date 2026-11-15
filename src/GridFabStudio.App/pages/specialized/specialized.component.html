@@ -1,0 +1,119 @@
+
+      
+      
+      <div class="page-intro tool-intro">
+          <p class="eyebrow">MAKERWORLD 精選</p>
+          <h1>專用儲存格</h1>
+          <p>依工具與設備挑選剛好合用的模組，直接前往原作者頁面查看模型。</p>
+        </div>
+      
+      <article class="makerworld-catalog specialized-catalog" aria-label="MakerWorld 專用儲存格模型">
+          @for (featured of [featuredSpecial()]; track featured.url) {
+            <section class="special-showcase" aria-live="polite">
+              <div class="special-showcase-visual">
+                <img [src]="featured.image" [alt]="featured.title + ' 專用儲存格預覽'">
+                <span class="special-showcase-mark" aria-hidden="true">GRIDFINITY / {{ featured.meta.split('｜')[0] }}</span>
+                <div class="special-progress" aria-hidden="true"><span></span></div>
+              </div>
+              <div class="special-showcase-copy">
+                <div class="special-showcase-topline"><span class="catalog-badge">{{ featured.badge }}</span><span>{{ specialIndex() + 1 }} / {{ visibleSpecials().length }}</span></div>
+                <h2>{{ featured.title }}</h2>
+                <p class="special-showcase-meta">{{ featured.meta }} · {{ featured.author }}</p>
+                <p>{{ featured.description }}</p>
+                <div class="special-showcase-actions">
+                  <a [href]="featured.url" target="_blank" rel="noopener noreferrer">前往 MakerWorld <span aria-hidden="true">↗</span></a>
+                  <div class="special-showcase-controls" aria-label="切換精選模型">
+                    <button type="button" aria-label="上一個模型" (click)="stepSpecial(-1)">←</button>
+                    <button type="button" aria-label="下一個模型" (click)="stepSpecial(1)">→</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          }
+          <div class="special-toolbar">
+            <div class="special-filters" role="group" aria-label="依用途篩選模型">
+              @for (filter of specialFilters; track filter.id) {
+                <button type="button" [attr.aria-pressed]="specialCategory() === filter.id" (click)="setSpecialCategory(filter.id)">{{ filter.label }}</button>
+              }
+            </div>
+            <p class="special-count" aria-live="polite">{{ visibleSpecials().length }} 個精選模型</p>
+          </div>
+          <div class="makerworld-grid specialized-grid">
+            @for (item of visibleSpecials(); track item.url; let i = $index) {
+              <article class="makerworld-card special-card" [class.special-active]="specialIndex() === i">
+                <button class="makerworld-card-visual special-card-select" type="button" (click)="showSpecial(i)" [attr.aria-label]="'預覽 ' + item.title">
+                  <img [src]="item.image" [alt]="item.title + ' MakerWorld 模型封面'" loading="lazy">
+                  <span class="makerworld-mark" aria-hidden="true">MW</span>
+                </button>
+                <div class="makerworld-card-copy">
+                  <span class="catalog-badge">{{ item.badge }}</span>
+                  <h2>{{ item.title }}</h2>
+                  <p class="catalog-meta">{{ item.meta }} · {{ item.author }}</p>
+                  <p>{{ item.description }}</p>
+                  <a class="special-card-link" [href]="item.url" target="_blank" rel="noopener noreferrer">查看模型 <span aria-hidden="true">↗</span></a>
+                </div>
+              </article>
+            }
+          </div>
+          <p class="catalog-note">圖片與模型資訊來自 MakerWorld；檔案、版本與授權以原作者頁面為準，本站不重新託管 STL。</p>
+        </article>
+      
+      <div class="layout" [class.baseplate-layout]="mode() === 'baseplate' || mode() === 'design' || mode() === 'quote'" [class.quote-layout]="mode() === 'quote'" [hidden]="mode() !== 'baseplate' && mode() !== 'design' && mode() !== 'quote'">
+        
+        <section class="preview-panel" aria-label="3D 模型預覽">
+          <h2>3D 預覽</h2>
+          
+          <div class="viewport" #viewport [class.case-product-stage]="mode() === 'case'" [class.rugged]="caseFamily() === 'rugged'" [class.modular]="caseFamily() === 'modular'" [class.open]="casePreviewState() === 'open'" [class.stacked]="casePreviewState() === 'stacked'" [class.mounted]="casePreviewState() === 'mounted'" [class.with-top-handle]="caseHandle() === 'top' || caseHandle() === 'both'" [class.with-front-handle]="caseHandle() === 'front' || caseHandle() === 'both'" [class.with-drawer]="caseDrawer()" [style.--case-color]="caseColorValue()">
+            @if (mode() === 'case') {
+              <div class="case-mount-board" aria-hidden="true"></div>
+              <div class="case-product" role="img" [attr.aria-label]="casePreviewLabel()">
+                <div class="case-product-lid">
+                  <div class="case-lid-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                  <span class="case-top-handle" aria-hidden="true"></span>
+                  <span class="case-hinge hinge-a" aria-hidden="true"></span><span class="case-hinge hinge-b" aria-hidden="true"></span>
+                </div>
+                <div class="case-product-body">
+                  <span class="case-rib rib-a"></span><span class="case-rib rib-b"></span><span class="case-rib rib-c"></span>
+                  <span class="case-lock lock-a"></span><span class="case-lock lock-b"></span>
+                  <span class="case-front-handle"></span>
+                  <span class="case-side-rail rail-a"></span><span class="case-side-rail rail-b"></span>
+                  <span class="case-label-zone">{{ caseFamily() === 'rugged' ? 'RUGGED' : caseHeight() + 'U' }}</span>
+                  <div class="case-inner-grid" aria-hidden="true">@for (cell of caseCells; track $index) { <i></i> }</div>
+                </div>
+              </div>
+            } @else if (!hasPreview()) {
+              <p>{{ busy() ? '處理中…' : dimensions() ? '無法顯示 3D 預覽' : '產生或上傳 STL 後即可預覽' }}</p>
+            }
+          </div>
+          
+          @if (dimensions()) {
+            <p>模型外尺寸 {{ dimensions() }} mm</p>
+          }
+        </section>
+      </div>
+      
+    
+    @if (renderMessage()) {
+      <div class="render-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="render-dialog">
+          @switch (renderKind()) {
+            @case ('baseplate') {
+              <div class="render-grid" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            }
+            @case ('bin') {
+              <div class="render-bin-model" aria-hidden="true">
+                <span class="render-bin-shell"></span>
+                <span class="render-bin-layers"></span>
+                <i class="render-nozzle"></i>
+              </div>
+            }
+          }
+          <strong>{{ renderMessage() }}</strong>
+          <p>大型模型可能需要 1–3 分鐘，請保持頁面開啟。</p>
+        </div>
+      </div>
+    }

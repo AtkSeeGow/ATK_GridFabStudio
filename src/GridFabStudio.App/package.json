@@ -1,0 +1,26 @@
+{
+  "name": "gridfabstudio",
+  "private": true,
+  "scripts": {
+    "start:api": "dotnet run --project ../GridFabStudio.Api/GridFabStudio.Api.csproj",
+    "start": "ng serve --proxy-config proxy.json --host 127.0.0.1 --port 4200",
+    "build": "ng build",
+    "build:raspberry": "ng build --base-href /GridFabStudio.App/ --output-hashing all"
+  },
+  "dependencies": {
+    "@angular/common": "~21.2.0",
+    "@angular/compiler": "~21.2.0",
+    "@angular/core": "~21.2.0",
+    "@angular/platform-browser": "~21.2.0",
+    "rxjs": "~7.8.0",
+    "three": "~0.183.0",
+    "tslib": "^2.8.0"
+  },
+  "devDependencies": {
+    "@angular/build": "~21.2.0",
+    "@angular/cli": "~21.2.0",
+    "@angular/compiler-cli": "~21.2.0",
+    "@types/three": "~0.183.0",
+    "typescript": "~5.9.0"
+  }
+}
